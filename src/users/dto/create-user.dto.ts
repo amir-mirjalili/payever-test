@@ -11,5 +11,9 @@ export class CreateUserDto {
   @IsDefined()
   email: string;
   @IsOptional()
-  birthDate: string;
+  birthDate: Date;
+  @IsDefined()
+  password: string;
+  // @IsDefined()
+  // avatar: string;
 }
