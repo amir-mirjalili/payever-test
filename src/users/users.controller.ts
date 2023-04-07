@@ -40,7 +40,7 @@ export class UsersController {
     @Body() body: CreateUserDto,
     @UploadedFile() file: Express.Multer.File,
   ) {
-    body.avatar = file.filename;
+    body.avatar = file ? file.filename : '';
     const response = await this.userService.create(body);
     return response;
   }
@@ -51,12 +51,15 @@ export class UsersController {
   }
 
   @Get(':userId/avatar')
-  async getFile(@Param() params): Promise<StreamableFile> {
+  async getFile(@Param() params): Promise<StreamableFile> | null {
     const user = await this.userService.findById(params.userId);
-    const file = createReadStream(
-      join(process.cwd(), `/uploads/${user.avatar}`),
-    );
-    return new StreamableFile(file);
+    if (user.avatar) {
+      const file = createReadStream(
+        join(process.cwd(), `/uploads/${user.avatar}`),
+      );
+      return new StreamableFile(file);
+    }
+    return null;
   }
 
   @Delete(':userId/avatar')
