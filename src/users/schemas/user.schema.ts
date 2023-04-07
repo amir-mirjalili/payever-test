@@ -20,8 +20,8 @@ export class User extends Document {
   birthDate: string;
   @Prop({ required: true, type: String, minlength: 6 })
   password: string;
-  // @Prop({ required: true, type: String })
-  // avatar: string;
+  @Prop({ required: true, type: String })
+  avatar: string;
 }
 
 export const UserSchema = SchemaFactory.createForClass(User);

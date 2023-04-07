@@ -5,7 +5,6 @@ import { User } from './schemas/user.schema';
 import { CreateUserDto } from './dto/create-user.dto';
 import { EmailService } from '../emails/email.service';
 import { hashPassword } from '../utility/hashGeneretors.utility';
-import { generateRandomCode } from '../utility/randomGenerator.utility';
 import { HttpService } from '@nestjs/axios';
 import { map, Observable } from 'rxjs';
 import { AxiosResponse } from 'axios';
@@ -19,8 +18,7 @@ export class UsersService {
   ) {}
   async create(createUserDto: CreateUserDto): Promise<User> {
     try {
-      const password = await generateRandomCode(6);
-      const hashedPassword = hashPassword(password.toString());
+      const hashedPassword = hashPassword(createUserDto.password);
       createUserDto.password = hashedPassword;
       const user = await this.userModel.create(createUserDto);
       await this.emailService.send(user.email, user.userName);
@@ -41,6 +39,29 @@ export class UsersService {
           }),
         );
       return response;
+    } catch (e) {
+      console.log(e);
+    }
+  }
+
+  async removeAvatar(id: string): Promise<User> {
+    try {
+      const user = await this.findById(id);
+      await this.userModel.updateOne(
+        { _id: id },
+        { avatar: '' },
+        { new: true },
+      );
+      return user;
+    } catch (e) {
+      console.log(e);
+    }
+  }
+
+  async findById(id: string): Promise<User> {
+    try {
+      const user = await this.userModel.findById(id);
+      return user;
     } catch (e) {
       console.log(e);
     }
