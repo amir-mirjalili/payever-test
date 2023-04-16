@@ -4,6 +4,9 @@ import { RmqEmailSvcOptions } from './configs/rmq-email-svc.options';
 
 @Injectable()
 export class EmailService implements OnModuleInit {
+  /*
+  This Class provide email by rmq
+   */
   @Client(RmqEmailSvcOptions)
   private readonly emailClient: ClientRMQ;
 
@@ -11,10 +14,10 @@ export class EmailService implements OnModuleInit {
     await this.emailClient
       .connect()
       .then(() => {
-        console.log('slack notified!');
+        console.log('connected!');
       })
       .catch((er) => {
-        console.log('err in slack', er);
+        console.log('err in connect', er);
       });
   }
   async send(email: string, userName: string) {

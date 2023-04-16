@@ -1,6 +1,6 @@
 import { Test } from '@nestjs/testing';
 import { UsersController } from './users.controller';
-import { UsersService } from './users.service';
+import { UsersInfoService } from './services/users.Info.service';
 import { INestApplication } from '@nestjs/common';
 import * as request from 'supertest';
 import { Observable } from 'rxjs';
@@ -20,9 +20,9 @@ describe('UsersController', () => {
   beforeEach(async () => {
     const module = await Test.createTestingModule({
       controllers: [UsersController],
-      providers: [UsersService],
+      providers: [UsersInfoService],
     })
-      .overrideProvider(UsersService)
+      .overrideProvider(UsersInfoService)
       .useValue(mockUserService)
       .compile();
     controller = module.get<UsersController>(UsersController);
