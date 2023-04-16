@@ -12,16 +12,3 @@ export const hashPassword = (
 ): string => {
   return bcrypt.hashSync(rawPassword, hashingRounds);
 };
-
-/**
- * Decrypt salt password
- * @param raw_password string password
- * @param hashed_password salt hashed password
- * @returns boolean
- */
-export const validate_password = async (
-  raw_password: string,
-  hashed_password: string,
-): Promise<boolean> => {
-  return await bcrypt.compare(raw_password, hashed_password);
-};

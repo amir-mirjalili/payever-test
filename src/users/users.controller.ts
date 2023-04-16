@@ -9,18 +9,25 @@ import {
   UploadedFile,
   UseInterceptors,
 } from '@nestjs/common';
-import { UsersService } from './users.service';
+import { UsersInfoService } from './services/users.Info.service';
 import { CreateUserDto } from './dto/create-user.dto';
 import { FileInterceptor } from '@nestjs/platform-express';
 import { diskStorage } from 'multer';
-import { extname } from 'path';
-import { createReadStream } from 'fs';
-import { join } from 'path';
+import { extname, join } from 'path';
 import * as fs from 'fs';
+import { createReadStream } from 'fs';
+import { UsersCreateService } from './services/users.create.service';
+import { UsersAvatarService } from './services/users.avatar.service';
+import { UsersReqresInfoService } from './services/users.reqres.info.service';
 
 @Controller('api/users')
 export class UsersController {
-  constructor(private readonly userService: UsersService) {}
+  constructor(
+    private readonly usersInfoService: UsersInfoService,
+    private readonly usersCreateService: UsersCreateService,
+    private readonly usersAvatarService: UsersAvatarService,
+    private readonly usersReqresInfoService: UsersReqresInfoService,
+  ) {}
   @Post()
   @UseInterceptors(
     FileInterceptor('avatar', {
@@ -41,18 +48,16 @@ export class UsersController {
     @UploadedFile() file: Express.Multer.File,
   ) {
     body.avatar = file ? file.filename : '';
-    const response = await this.userService.create(body);
-    return response;
+    return await this.usersCreateService.create(body);
   }
   @Get(':userId')
   async findById(@Param() params) {
-    const response = await this.userService.findFromReqresById(params.userId);
-    return response;
+    return await this.usersReqresInfoService.getById(params.userId);
   }
 
   @Get(':userId/avatar')
   async getFile(@Param() params): Promise<StreamableFile> | null {
-    const user = await this.userService.findById(params.userId);
+    const user = await this.usersInfoService.findById(params.userId);
     if (user.avatar) {
       const file = createReadStream(
         join(process.cwd(), `/uploads/${user.avatar}`),
@@ -64,7 +69,7 @@ export class UsersController {
 
   @Delete(':userId/avatar')
   async removeFile(@Param() params) {
-    const response = await this.userService.removeAvatar(params.userId);
+    const response = await this.usersAvatarService.removeAvatar(params.userId);
     fs.unlinkSync(join(process.cwd(), `/uploads/${response.avatar}`));
     return 'removed';
   }
