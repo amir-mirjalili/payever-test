@@ -3,6 +3,8 @@ import {
   Controller,
   Delete,
   Get,
+  HttpException,
+  HttpStatus,
   Param,
   Post,
   StreamableFile,
@@ -48,7 +50,9 @@ export class UsersController {
     @UploadedFile() file: Express.Multer.File,
   ) {
     body.avatar = file ? file.filename : '';
-    return await this.usersCreateService.create(body);
+    const response = await this.usersCreateService.create(body);
+    if (response) return response;
+    throw new HttpException('This user is duplicated', HttpStatus.CONFLICT);
   }
   @Get(':userId')
   async findById(@Param() params) {

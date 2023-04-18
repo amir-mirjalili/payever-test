@@ -1,19 +1,18 @@
-import { Injectable } from "@nestjs/common";
-import { CreateUserDto } from "../dto/create-user.dto";
-import { User } from "../schemas/user.schema";
-import { hashPassword } from "../../utility/hashGeneretors.utility";
-import { InjectModel } from "@nestjs/mongoose";
-import { Model } from "mongoose";
-import { EmailService } from "../../emails/email.service";
+import { Injectable } from '@nestjs/common';
+import { CreateUserDto } from '../dto/create-user.dto';
+import { User } from '../schemas/user.schema';
+import { hashPassword } from '../../utility/hashGeneretors.utility';
+import { InjectModel } from '@nestjs/mongoose';
+import { Model } from 'mongoose';
+import { EmailService } from '../../emails/email.service';
 
 @Injectable()
 export class UsersCreateService {
-
   constructor(
-    @InjectModel(User.name)private userModel: Model<User>,
-      private readonly emailService: EmailService,
-  ){}
-     /*
+    @InjectModel(User.name) private userModel: Model<User>,
+    private readonly emailService: EmailService,
+  ) {}
+  /*
       Create New User
      */
   async create(createUserDto: CreateUserDto): Promise<User> {

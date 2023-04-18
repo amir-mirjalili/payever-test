@@ -6,13 +6,16 @@ import * as request from 'supertest';
 import { Observable } from 'rxjs';
 import { AxiosResponse } from 'axios';
 import { User } from './schemas/user.schema';
+import { UsersCreateService } from './services/users.create.service';
+import { UsersAvatarService } from './services/users.avatar.service';
+import { UsersReqresInfoService } from './services/users.reqres.info.service';
 
 describe('UsersController', () => {
   let app: INestApplication;
   let controller: UsersController;
 
   const mockUserService = {
-    findFromReqresById: () => Promise<Observable<AxiosResponse<object>>>,
+    getById: () => Promise<Observable<AxiosResponse<object>>>,
     findById: () => Promise<User>,
     removeAvatar: () => Promise<User>,
     create: () => Promise<User>,
@@ -20,11 +23,17 @@ describe('UsersController', () => {
   beforeEach(async () => {
     const module = await Test.createTestingModule({
       controllers: [UsersController],
-      providers: [UsersInfoService],
-    })
-      .overrideProvider(UsersInfoService)
-      .useValue(mockUserService)
-      .compile();
+      providers: [
+        UsersInfoService,
+        { provide: UsersInfoService, useValue: mockUserService },
+        UsersCreateService,
+        { provide: UsersCreateService, useValue: mockUserService },
+        UsersAvatarService,
+        { provide: UsersAvatarService, useValue: mockUserService },
+        UsersReqresInfoService,
+        { provide: UsersReqresInfoService, useValue: mockUserService },
+      ],
+    }).compile();
     controller = module.get<UsersController>(UsersController);
 
     app = module.createNestApplication();
