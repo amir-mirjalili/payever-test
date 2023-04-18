@@ -1,7 +1,9 @@
 import { map, Observable } from 'rxjs';
 import { AxiosResponse } from 'axios';
 import { HttpService } from '@nestjs/axios';
+import { Injectable } from '@nestjs/common';
 
+@Injectable()
 export class UsersReqresInfoService {
   /*
   This Class contains method that return user info from reqres apis

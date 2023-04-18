@@ -11,11 +11,12 @@ export class UsersAvatarService {
   constructor(@InjectModel(User.name) private userModel: Model<User>) {}
   async removeAvatar(id: string): Promise<any> {
     try {
-      await this.userModel.updateOne(
+      const user = await this.userModel.findOneAndUpdate(
         { _id: id },
         { avatar: '' },
-        { new: true },
+        { new: false },
       );
+      return user;
     } catch (e) {
       console.log(e);
     }
