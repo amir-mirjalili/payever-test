@@ -21,7 +21,6 @@ import { createReadStream } from 'fs';
 import { UsersCreateService } from './services/users.create.service';
 import { UsersAvatarService } from './services/users.avatar.service';
 import { UsersReqresInfoService } from './services/users.reqres.info.service';
-import { response } from 'express';
 
 @Controller('api/users')
 export class UsersController {

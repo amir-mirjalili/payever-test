@@ -3,7 +3,6 @@ import { UsersController } from './users.controller';
 import { UsersInfoService } from './services/users.Info.service';
 import { INestApplication } from '@nestjs/common';
 import * as request from 'supertest';
-import { User } from './schemas/user.schema';
 import { UsersCreateService } from './services/users.create.service';
 import { UsersAvatarService } from './services/users.avatar.service';
 import { UsersReqresInfoService } from './services/users.reqres.info.service';

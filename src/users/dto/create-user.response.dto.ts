@@ -1,5 +1,3 @@
-import { User } from '../schemas/user.schema';
-
 export class CreateUserResponseDto {
   firstName: string;
   lastName: string;
