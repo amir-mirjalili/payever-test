@@ -1,7 +1,7 @@
 import { UsersCreateService } from './users.create.service';
 import { User } from '../schemas/user.schema';
 import { Test, TestingModule } from '@nestjs/testing';
-import { CreateUserDto } from '../dto/create-user.dto';
+import { CreateUserRequestDto } from '../dto/create-user.request.dto';
 
 describe('UserCreateService', () => {
   let service: UsersCreateService;
@@ -24,7 +24,7 @@ describe('UserCreateService', () => {
   });
 
   it('should create user', () => {
-    const data = new CreateUserDto();
+    const data = new CreateUserRequestDto();
     data.userName = 'a';
     data.password = '1234';
     data.birthDate = new Date();

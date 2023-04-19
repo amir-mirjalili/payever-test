@@ -12,7 +12,7 @@ import {
   UseInterceptors,
 } from '@nestjs/common';
 import { UsersInfoService } from './services/users.Info.service';
-import { CreateUserDto } from './dto/create-user.dto';
+import { CreateUserRequestDto } from './dto/create-user.request.dto';
 import { FileInterceptor } from '@nestjs/platform-express';
 import { diskStorage } from 'multer';
 import { extname, join } from 'path';
@@ -46,7 +46,7 @@ export class UsersController {
     }),
   )
   async create(
-    @Body() body: CreateUserDto,
+    @Body() body: CreateUserRequestDto,
     @UploadedFile() file: Express.Multer.File,
   ) {
     body.avatar = file ? file.filename : '';
@@ -56,7 +56,9 @@ export class UsersController {
   }
   @Get(':userId')
   async findById(@Param() params) {
-    return await this.usersReqresInfoService.getById(params.userId);
+    const response = await this.usersReqresInfoService.getById(params.userId);
+    if (response) return response;
+    throw new HttpException('no result', HttpStatus.NOT_FOUND);
   }
 
   @Get(':userId/avatar')
