@@ -17,7 +17,7 @@ export class User extends Document {
   })
   email: string;
   @Prop({ required: false, type: Date })
-  birthDate: string;
+  birthDate: Date;
   @Prop({ required: true, type: String, minlength: 6 })
   password: string;
   @Prop({ type: String })

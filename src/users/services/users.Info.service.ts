@@ -2,6 +2,7 @@ import { Injectable } from '@nestjs/common';
 import { InjectModel } from '@nestjs/mongoose';
 import { Model } from 'mongoose';
 import { User } from '../schemas/user.schema';
+import { GetUserResponseDto } from '../dto/get-user.response.dto';
 
 @Injectable()
 export class UsersInfoService {
@@ -14,10 +15,18 @@ export class UsersInfoService {
   Get User Info By id
   @param id
    */
-  async findById(id: string): Promise<User> {
+  async findById(id: string): Promise<GetUserResponseDto> {
     try {
       const user = await this.userModel.findById(id);
-      return user;
+      return new GetUserResponseDto({
+        firstName: user.firstName,
+        lastName: user.lastName,
+        userName: user.userName,
+        email: user.email,
+        avatar: user.avatar,
+        birthDate: user.birthDate,
+        password: user.password,
+      });
     } catch (e) {
       console.log(e);
     }

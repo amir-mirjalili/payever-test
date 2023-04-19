@@ -3,22 +3,23 @@ import { UsersController } from './users.controller';
 import { UsersInfoService } from './services/users.Info.service';
 import { INestApplication } from '@nestjs/common';
 import * as request from 'supertest';
-import { Observable } from 'rxjs';
-import { AxiosResponse } from 'axios';
 import { User } from './schemas/user.schema';
 import { UsersCreateService } from './services/users.create.service';
 import { UsersAvatarService } from './services/users.avatar.service';
 import { UsersReqresInfoService } from './services/users.reqres.info.service';
+import { GetUserReqresResponseDto } from './dto/get-user-reqres.response.dto';
+import { GetUserResponseDto } from './dto/get-user.response.dto';
+import { CreateUserResponseDto } from './dto/create-user.response.dto';
 
 describe('UsersController', () => {
   let app: INestApplication;
   let controller: UsersController;
 
   const mockUserService = {
-    getById: () => Promise<Observable<AxiosResponse<object>>>,
-    findById: () => Promise<User>,
-    removeAvatar: () => Promise<User>,
-    create: () => Promise<User>,
+    getById: () => Promise<GetUserReqresResponseDto>,
+    findById: () => Promise<GetUserResponseDto>,
+    removeAvatar: () => Promise<GetUserResponseDto>,
+    create: () => Promise<CreateUserResponseDto>,
   };
   beforeEach(async () => {
     const module = await Test.createTestingModule({

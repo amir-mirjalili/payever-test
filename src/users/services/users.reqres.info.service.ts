@@ -1,7 +1,7 @@
-import { map, Observable } from 'rxjs';
-import { AxiosResponse } from 'axios';
+import { lastValueFrom } from 'rxjs';
 import { HttpService } from '@nestjs/axios';
 import { Injectable } from '@nestjs/common';
+import { GetUserReqresResponseDto } from '../dto/get-user-reqres.response.dto';
 
 @Injectable()
 export class UsersReqresInfoService {
@@ -9,16 +9,18 @@ export class UsersReqresInfoService {
   This Class contains method that return user info from reqres apis
    */
   constructor(private readonly httpService: HttpService) {}
-  async getById(id: string): Promise<Observable<AxiosResponse<object>>> {
+  async getById(id: string): Promise<GetUserReqresResponseDto> {
     try {
-      const response = await this.httpService
-        .get(`https://reqres.in/api/users/${id}`)
-        .pipe(
-          map((axiosResponse: AxiosResponse) => {
-            return axiosResponse.data;
-          }),
-        );
-      return response;
+      const response = await lastValueFrom(
+        this.httpService.get(`https://reqres.in/api/users/${id}`),
+      );
+      return new GetUserReqresResponseDto({
+        id: response.data.data.id,
+        email: response.data.data.email,
+        first_name: response.data.data.first_name,
+        last_name: response.data.data.last_name,
+        avatar: response.data.data.avatar,
+      });
     } catch (e) {
       console.log(e);
     }
